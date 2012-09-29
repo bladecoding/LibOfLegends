@@ -80,7 +80,7 @@ namespace LibOfLegends
 		{
 			try
 			{
-				AuthService authService = new AuthService(ConnectionData.Region.LoginQueueURL, ConnectionData.Proxy.LoginQueueProxy);
+				AuthService authService = new AuthService(ConnectionData.Region.LoginQueueURL);
 				// Get an Auth token (Dumb, assumes no queueing, blocks)
 				AuthResponse = authService.Authenticate(ConnectionData.User, ConnectionData.Password);
 			}
@@ -92,7 +92,6 @@ namespace LibOfLegends
 
 			// Initialise our RTMPS connection
 			RPCNetConnection = new NetConnection();
-			RPCNetConnection.Proxy = ConnectionData.Proxy.RTMPProxy;
 
 			// We should use AMF3 to behave as closely to the client as possible.
 			RPCNetConnection.ObjectEncoding = ObjectEncoding.AMF3;

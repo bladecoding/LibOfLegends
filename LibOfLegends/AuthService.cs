@@ -14,13 +14,9 @@ namespace LibOfLegends
 	/// </summary>
 	public class AuthService
 	{
-		public AuthService(string loginQueueURL, Proxy proxy = null)
+		public AuthService(string loginQueueURL)
 		{
 			LoginQueueURL = loginQueueURL;
-			Proxy = proxy;
-
-			if (Proxy != null && Proxy.Type != ProxyType.HTTP)
-				throw new NotImplementedException("Proxy not supported for login queue with type other than HTTP");
 		}
 
 		public static bool TrustAllCertificates(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
@@ -44,12 +40,6 @@ namespace LibOfLegends
 			// Authenticate with the queue service
 			HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(string.Format("{0}/authenticate", LoginQueueURL));
 			request.Method = "POST";
-
-			if (Proxy != null)
-			{
-				string[] proxyParts = Proxy.Server.Split(':');
-				request.Proxy = new WebProxy(proxyParts[0], int.Parse(proxyParts[1]));
-			}
 
 			string innerPostBody = "user=" + System.Web.HttpUtility.UrlEncode(name) + ",password=" + System.Web.HttpUtility.UrlEncode(password);
 			string postBody = "payload=" + System.Web.HttpUtility.UrlEncode(innerPostBody);
@@ -77,7 +67,6 @@ namespace LibOfLegends
 		#region Configuration variables
 
 		string LoginQueueURL;
-		Proxy Proxy;
 
 		#endregion
 	}
